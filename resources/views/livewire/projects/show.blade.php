@@ -1,0 +1,3 @@
+<x-project-card :$project/>
+
+
