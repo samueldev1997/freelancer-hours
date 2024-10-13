@@ -9,7 +9,7 @@ use Livewire\Component;
 class Create extends Component {
     
     public Project $project;
-    public bool $modal = false;
+    public bool $modal = true;
 
     #[Validate(['required', 'email'])]
     public string $email = '';
@@ -22,15 +22,24 @@ class Create extends Component {
         $this->project = $project;
     }
 
+    public bool $agree = false;
+
     public function save() {
 
         $this->validate();
+
+        if(!$this->agree) {
+            $this->addError('agree', 'Você precisa concordar com os termos de uso.');
+            return;
+        }
 
         $this->project->proposals()
         ->updateOrCreate(
             ['email' => $this->email],
             ['hours' => $this->hours]
         );
+
+        $this->modal = false;
 
     }
     
